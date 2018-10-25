@@ -19,6 +19,15 @@ leaf ◂ PTree2 = inFixIndM (in1 unit) .
 node ◂ PTree2Sel ➔ PTree2
   = λ s. inFixIndM (in2 s).
 
+sub-part ◂  ∀ R: ★. Id ·R ·PTree2 ➾ Id ·(PTree2 ➔ Bool) ·(R ➔ Bool)
+  = Λ R. Λ id. subArr -id -(subRefl ·Bool) .
+
+sub-node1 ◂ ∀ R: ★. Id ·R ·PTree2 ➾ Id ·((R ➔ Bool) ➔ R) ·((PTree2 ➔ Bool) ➔ R)
+  = Λ R. Λ id. subArr -(sub-part -id) -(subRefl ·R) .
+
+sub-node2 ◂ ∀ R: ★. Id ·R ·PTree2 ➾ Id ·((R ➔ Bool) ➔ R) ·((PTree2 ➔ Bool) ➔ PTree2)
+  = Λ R. Λ id. subArr -(sub-part -id) -id.
+
 indPTree2 ◂ ∀ P: PTree2 ➔ ★.
     P leaf ➔ (∀ s: PTree2Sel. (Π p: PTree2 ➔ Bool. P (s p)) ➔ P (node s)) ➔ Π t: PTree2. P t
   = Λ P. λ base. λ step. λ t. induction ·P
@@ -35,6 +44,14 @@ indPTree2' ◂ ∀ P: PTree2 ➔ ★.
       (Λ R. Λ c. λ ih. λ gr. θ<gr> (indSum gr)
         (λ u. ρ (etaUnit u) - base)
         (λ s. step -s (λ p. ih (s p))))
+      t.
+
+indPTree2''' ◂ ∀ P: PTree2 ➔ ★.
+    P leaf ➔ (∀ s: PTree2Sel. (Π p: PTree2 ➔ Bool. P (s p)) ➔ P (node s)) ➔ Π t: PTree2. P t
+  = Λ P. λ base. λ step. λ t. induction ·P
+      (Λ R. Λ c. λ ih. λ gr. θ<gr> (indSum gr)
+        (λ u. ρ (etaUnit u) - base)
+        (λ s. step -(sub -(sub-node2 -c) s) (λ p. ih ((sub -(sub-node1 -c) s) p))))
       t.
 
 

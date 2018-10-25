@@ -36,3 +36,16 @@ idf ◂ ∀ A : ★. Id · A · A = Λ A. intrId · A · A (λ x. x) (λ _. β).
 composeId ◂ ∀ A : ★ . ∀ B : ★ . ∀ C : ★. Id · A · B ➾ Id · B · C ➾ Id · A · C
  = Λ A. Λ B. Λ C. Λ c1. Λ c2. 
  intrId · A · C (λ a. elimId · B · C -c2 (elimId · A · B -c1 a)) (λ _. β).
+
+-- subsumption
+
+subRefl = idf.
+subTran = composeId.
+
+subArr : ∀ A1: ★.  ∀ B1: ★. ∀ A2: ★. ∀ B2: ★.
+    Id ·A2 ·A1 ➾ Id ·B1 ·B2 ➾ Id ·(A1 ➔ B1) ·(A2 ➔ B2)
+  = Λ A1. Λ B1. Λ A2. Λ B2. Λ dom. Λ cod. intrId
+      (λ fa. λ a1. elimId -cod (fa (elimId -dom a1)))
+      (λ _. β).
+
+sub = elimId .
