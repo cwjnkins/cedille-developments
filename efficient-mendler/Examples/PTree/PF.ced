@@ -12,9 +12,24 @@ import NF.
 -- non-strictly positive scheme 
 PF ◂ ★ ➔ ★ = λ X : ★. (X ➔ Bool) ➔ Sum · Unit · X.
 
+PF2 ◂ ★ ➔ ★ = λ R: ★. Sum ·Unit ·((R ➔ Bool) ➔ R).
 
 -- As in case of IF, the implementation of identity mapping for PF
 -- relies on eta law.
 pfimap ◂ IdMapping · PF = Λ X. Λ Y. Λ c. pair · (PF · X ➔ PF · Y) · (λ f : PF · X ➔ PF · Y. {f ≃ id})  
   (λ v. λ n. elimId · (Sum · Unit · X) · (Sum · Unit · Y) -(nfimap · X · Y -c) 
                 (v (λ x. n (elimId · X · Y -c x)))) β.
+
+sumRefl ◂ ∀ A: ★. ∀ B: ★. Π c: Sum ·A ·B. {c in1 in2 ≃ c}
+  = Λ A. Λ B. λ c. c.2.1 .
+
+
+pf2imap ◂ IdMapping ·PF2
+  = Λ R1. Λ R2. Λ c.
+      intrId
+       (λ t1. case t1 (λ u. in1 u)
+         (λ s1. in2 (λ p2.
+         [ p1 : R1 ➔ Bool = λ r1. p2 (elimId -c r1) ]
+         - elimId -c (s1 p1)
+         )))
+       (λ z. ρ (sumRefl z) - β).

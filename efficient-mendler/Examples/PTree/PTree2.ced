@@ -1,0 +1,50 @@
+module PTree2.
+
+import Unit.
+import Bool.
+import Sum.
+import Sigma.
+import Id.
+
+import PF.
+
+import FixIndM ·PF2 pf2imap.
+import InductionM ·PF2 pf2imap.
+
+PTree2 ◂ ★ = FixIndM.
+
+PTree2Sel ◂ ★ = (PTree2 ➔ Bool) ➔ PTree2 .
+
+leaf ◂ PTree2 = inFixIndM (in1 unit) .
+node ◂ PTree2Sel ➔ PTree2
+  = λ s. inFixIndM (in2 s).
+
+indPTree2 ◂ ∀ P: PTree2 ➔ ★.
+    P leaf ➔ (∀ s: PTree2Sel. (Π p: PTree2 ➔ Bool. P (s p)) ➔ P (node s)) ➔ Π t: PTree2. P t
+  = Λ P. λ base. λ step. λ t. induction ·P
+      (Λ R. Λ c. λ ih. λ gr. θ<gr> (indSum gr)
+        (λ u. ρ (etaUnit u) - base)
+        (λ s. [ conv-p : (PTree2 ➔ Bool) ➔ R ➔ Bool = λ p. λ r. p (elimId -c r) ]
+          - [ s' : (PTree2 ➔ Bool) ➔ PTree2 = λ p. elimId -c (s (conv-p p)) ]
+          - step -s' (λ p. ih (s (conv-p p)))))
+      t.
+
+indPTree2' ◂ ∀ P: PTree2 ➔ ★.
+    P leaf ➔ (∀ s: PTree2Sel. (Π p: PTree2 ➔ Bool. P (s p)) ➔ P (node s)) ➔ Π t: PTree2. P t
+  = Λ P. λ base. λ step. λ t. induction ·P
+      (Λ R. Λ c. λ ih. λ gr. θ<gr> (indSum gr)
+        (λ u. ρ (etaUnit u) - base)
+        (λ s. step -s (λ p. ih (s p))))
+      t.
+
+
+-- leaf ◂ PTree2 = inFixIndM (Λ X. λ l. λ n. l).
+-- node ◂ ((PTree2 ➔ Bool) ➔ PTree2) ➔ PTree2
+--   = λ s. inFixIndM (Λ X. λ l. λ n. n s).
+
+-- indPTree2 ◂ ∀ P: PTree2 ➔ ★.
+--     P leaf ➔ (∀ s: PTree2Sel. Π p: PTree2 ➔ Bool. P (s p) ➔ P (node s)) ➔ Π t: PTree2. P t
+--   = Λ P. λ base. λ step. λ t.
+--       induction ·P
+--         (Λ R. Λ c. λ ih. λ gr. ●)
+--         t.
