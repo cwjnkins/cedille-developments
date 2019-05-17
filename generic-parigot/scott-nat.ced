@@ -21,12 +21,9 @@ NatFI ◂ ★ ➔ ★ = λ R : ★.
 
 MonoNatFI ◂ Mono · NatFI = Λ R1. Λ R2. λ c.
   caste
-    -(λ n.
-       [ cast -(MonoNatF c) n.1
-       , Λ P. λ z. λ s.
+    -(λ n. [ cast -(MonoNatF c) n.1 , Λ P. λ z. λ s.
          n.2 · (λ x : NatF · R1. P (cast -(MonoNatF c) x)) z
-           (λ r. Λ n'. Λ eq. Λ pf.
-             s (cast -c r) -(cast -(MonoNatF c) n') -eq -pf)])
+           (λ r. Λ n'. Λ eq. Λ pf. s (cast -c r) -(cast -(MonoNatF c) n') -eq -pf)])
     -(λ _. β).
 
 Nat ◂ ★ = Rec · NatFI.
