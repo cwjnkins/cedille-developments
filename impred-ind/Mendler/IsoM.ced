@@ -7,9 +7,10 @@ import PropertiesM.
 import ConvM.
 import ConvC.
 
+module IsoM.
 
-% defining the composition of conversions
-% Mendler (FixIndM) -> Church (FixIndC) -> Mendler (FixIndM)
+-- defining the composition of conversions
+-- Mendler (FixIndM) -> Church (FixIndC) -> Mendler (FixIndM)
 men2men ◂ ∀ F : ★ ➔ ★. Π fmap : Fmap · F. 
  Π flaw2 : Flaw2 · F fmap. 
  Π flaw1 : Flaw1 · F fmap. 
@@ -18,16 +19,16 @@ men2men ◂ ∀ F : ★ ➔ ★. Π fmap : Fmap · F.
  ch2men · F fmap flaw1 (men2ch · F fmap flaw2 flaw1 fix).
 
 
-% proof that men2men is an Mendler F-algebra homomorphism from FixIndM
-% to FixIndM.
+-- proof that men2men is an Mendler F-algebra homomorphism from FixIndM
+-- to FixIndM.
 men2menlem ◂  ∀ F : ★ ➔ ★. Π fmap : Fmap · F.  
  Π flaw2 : Flaw2 · F fmap. 
  Π flaw1 : Flaw1 · F fmap.
  Π e : F · (FixIndM · F fmap). 
- (men2men fmap flaw2 flaw1 (inFixIndM fmap flaw1 (λ x. x) e)) ≃ 
-  (inFixIndM fmap flaw1 (men2men fmap flaw2 flaw1) e) 
+ {(men2men fmap flaw2 flaw1 (inFixIndM fmap flaw1 (λ x. x) e)) ≃ 
+  (inFixIndM fmap flaw1 (men2men fmap flaw2 flaw1) e)} 
  = Λ F. λ fmap. λ flaw2.  λ flaw1. λ e. 
- let el = (fmap · (FixIndM · F fmap) · (FixIndM · F fmap) (men2men · F fmap flaw2 flaw1) e) in
+ [el = (fmap · (FixIndM · F fmap) · (FixIndM · F fmap) (men2men · F fmap flaw2 flaw1) e)] -
  (ρ+ (flaw1 · (FixIndM · F fmap) -β{λ x. x} e -(λ z. β)) - 
   ρ+ (flaw1 · (FixIndM · F fmap) -β{λ x. x} el -(λ z. β)) -
   ρ+ (flaw1 · (FixIndM · F fmap) -β{λ x. x} el -(λ z. β)) -
@@ -56,15 +57,15 @@ men2menlem ◂  ∀ F : ★ ➔ ★. Π fmap : Fmap · F.
   β).
 
 
-% First part of the proof that Mendler (FixIndM) is isomorphic to
-% Church (FixIndC).  Namely, that conversion Mendler -> Church ->
-% Mendler is identity.
+-- First part of the proof that Mendler (FixIndM) is isomorphic to
+-- Church (FixIndC).  Namely, that conversion Mendler -> Church ->
+-- Mendler is identity.
 isoM ◂ ∀ F : ★ ➔ ★. Π fmap : Fmap · F. 
  Π flaw2 : Flaw2 · F fmap. 
  Π flaw1 : Flaw1 · F fmap. 
  Π fmapEq : Feq · F fmap.
  Π fix : (FixIndM · F fmap). 
- (men2men fmap flaw2 flaw1 fix) ≃ fix 
+ {(men2men fmap flaw2 flaw1 fix) ≃ fix} 
  = Λ F. λ fmap. λ law2. λ law1. λ eq. λ fix. 
  ρ (universalM · F fmap law1 law2 eq fix · (FixIndM · F fmap) 
     (men2men · F fmap law2 law1) 

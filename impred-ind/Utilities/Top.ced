@@ -1,4 +1,5 @@
+module Top.
 
-Top ◂ ★ = λ x. x ≃ λ x. x.
+Top ◂ ★ = {λ x. x ≃ λ x. x}.
 
 top ◂ Top = β{λ x. x}.
